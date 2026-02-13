@@ -37,6 +37,22 @@ class Dataset(Base):
     )
 
 
+class Seller(Base):
+    __tablename__ = "sellers"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    name: Mapped[str] = mapped_column(String(120), nullable=False, unique=True)
+    region: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    is_active: Mapped[bool] = mapped_column(default=True)
+    created_at: Mapped[object] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+    records: Mapped[list["Record"]] = relationship(back_populates="seller")
+
+
 class Record(Base):
     __tablename__ = "records"
 
