@@ -1,6 +1,6 @@
 from datetime import date, datetime
 from uuid import UUID
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class DatasetOut(BaseModel):
@@ -43,3 +43,8 @@ class CategoryTotal(BaseModel):
 class UploadResponse(BaseModel):
     dataset_id: UUID
     rows_inserted: int
+
+
+class DatasetUpdate(BaseModel):
+    name: str | None = Field(default=None, min_length=2, max_length=200)
+    status: str | None = Field(default=None, max_length=32)

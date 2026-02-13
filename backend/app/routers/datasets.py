@@ -6,7 +6,13 @@ from pydantic import BaseModel
 
 from ..deps import get_db
 from ..models import Dataset, Record
-from ..schemas import DatasetOut, SeriesPoint, KpisOut, UploadResponse
+from ..schemas import (
+    DatasetOut,
+    SeriesPoint,
+    KpisOut,
+    UploadResponse,
+    DatasetUpdate,
+)
 from ..services.csv_importer import parse_csv
 
 router = APIRouter(prefix="/datasets", tags=["datasets"])
@@ -176,3 +182,33 @@ async def upload_dataset(
     db.commit()
 
     return {"dataset_id": ds.id, "rows_inserted": len(records)}
+
+
+@router.patch("/{dataset_id}", response_model=DatasetOut)
+def update_dataset(
+    dataset_id: UUID, payload: DatasetUpdate, db: Session = Depends(get_db)
+):
+    ds = db.get(Dataset, dataset_id)
+    if not ds:
+        raise HTTPException(status_code=404, detail="Dataset not found")
+
+    if payload.name is not None:
+        ds.name = payload.name
+    if payload.status is not None:
+        ds.status = payload.status
+
+    db.commit()
+    db.refresh(ds)
+    return ds
+
+
+@router.delete("/{dataset_id}")
+def delete_dataset(dataset_id: UUID, db: Session = Depends(get_db)):
+    ds = db.get(Dataset, dataset_id)
+    if not ds:
+        raise HTTPException(status_code=404, detail="Dataset not found")
+
+    db.delete(ds)
+    db.commit()
+
+    return {"deleted": True, "dataset_id": str(dataset_id)}
