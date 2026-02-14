@@ -1,4 +1,5 @@
 import uuid
+
 from sqlalchemy import (
     String, Date, Numeric, Text, ForeignKey, Integer, DateTime, func, Boolean
 )
@@ -51,6 +52,7 @@ class Seller(Base):
     created_at: Mapped[object] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
+
     records: Mapped[list["Record"]] = relationship(back_populates="seller")
 
 
@@ -83,7 +85,7 @@ class Record(Base):
     )
 
     dataset: Mapped["Dataset"] = relationship(back_populates="records")
-    seller: Mapped["Seller | None"] = relationship(back_populates="records")
+    seller: Mapped["Seller"] = relationship(back_populates="records")
 
 
 class Insight(Base):
