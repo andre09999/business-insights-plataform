@@ -1,6 +1,6 @@
 from datetime import date, datetime
 from uuid import UUID
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class DatasetOut(BaseModel):
@@ -48,3 +48,35 @@ class UploadResponse(BaseModel):
 class DatasetUpdate(BaseModel):
     name: str | None = Field(default=None, min_length=2, max_length=200)
     status: str | None = Field(default=None, max_length=32)
+
+
+class SellerCreate(BaseModel):
+    name: str
+    region: str | None = None
+    is_active: bool = True
+
+
+class SellerRead(SellerCreate):
+    id: int
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class SellerUpdate(BaseModel):
+    name: str | None = Field(default=None, min_length=2, max_length=120)
+    region: str | None = Field(default=None, max_length=80)
+    is_active: bool | None = None
+
+
+class SellerOut(BaseModel):
+    id: UUID
+    name: str
+    region: str | None = None
+    is_active: bool
+
+    class Config:
+        from_attributes = True
+
+
+class RecordUpdate(BaseModel):
+    seller_id: UUID | None = None

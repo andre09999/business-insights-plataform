@@ -4,6 +4,8 @@ from sqlalchemy import text
 from .db import engine
 from .bootstrap import run as bootstrap_run
 from .routers.datasets import router as datasets_router
+from .routers.records import router as records_router
+from .routers.sellers import router as sellers_router
 
 
 @asynccontextmanager
@@ -16,6 +18,8 @@ app = FastAPI(title="Business Insights Platform", lifespan=lifespan)
 
 
 app.include_router(datasets_router)
+app.include_router(sellers_router)
+app.include_router(records_router)
 
 
 @app.get("/health")

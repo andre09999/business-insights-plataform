@@ -12,6 +12,8 @@
     "pycache",
     "quantity",
     "scalar",
-    "scalars"
+    "scalars",
+    "seller",
+    "sellers"
   ]
 }
