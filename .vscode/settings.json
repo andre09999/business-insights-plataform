@@ -6,6 +6,7 @@
     "daily",
     "Depends",
     "dialects",
+    "growth",
     "inserted",
     "kpis",
     "Kpis",
@@ -15,6 +16,8 @@
     "scalar",
     "scalars",
     "seller",
-    "sellers"
+    "sellers",
+    "span",
+    "totals"
   ]
 }

@@ -1,0 +1,35 @@
+section,key,value
+meta,dataset_id,e8ff160e-83b1-47c7-a859-60f47bf2acd1
+meta,start_date,2026-02-01
+meta,end_date,2026-02-15
+meta,seller_id,
+
+KPIs
+total_value,avg_daily_value,days,best_day_date,best_day_value,worst_day_date,worst_day_value
+16625.0,1187.5,14,2026-02-04,1565.0,2026-02-05,900.0
+
+Series
+date,value
+2026-02-01,1460.0
+2026-02-02,1495.0
+2026-02-03,1530.0
+2026-02-04,1565.0
+2026-02-05,900.0
+2026-02-06,935.0
+2026-02-07,970.0
+2026-02-08,1005.0
+2026-02-09,1040.0
+2026-02-10,1075.0
+2026-02-11,1110.0
+2026-02-12,1145.0
+2026-02-13,1180.0
+2026-02-14,1215.0
+
+Top Categories
+category,value
+Loja,6250.0
+Marketplace,5725.0
+Online,4650.0
+
+Seller Ranking
+seller_id,seller_name,total_value,avg_daily_value,days

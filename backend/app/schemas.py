@@ -80,3 +80,53 @@ class SellerOut(BaseModel):
 
 class RecordUpdate(BaseModel):
     seller_id: UUID | None = None
+
+
+class SellerRankingItem(BaseModel):
+    seller_id: UUID
+    seller_name: str
+    total_value: float
+    avg_daily_value: float
+    days: int
+
+
+class TopCategoryOut(BaseModel):
+    category: str
+    value: float
+
+
+class DashboardOut(BaseModel):
+    kpis: KpisOut
+    series: list[SeriesPoint]
+    top_categories: list[TopCategoryOut]
+    seller_ranking: list[SellerRankingItem]
+
+
+class DatasetSellerOut(BaseModel):
+    seller_id: UUID
+    seller_name: str
+    total_value: float
+    days: int
+
+
+class FilterSellerOut(BaseModel):
+    seller_id: UUID
+    seller_name: str
+
+
+class FiltersOut(BaseModel):
+    date_min: date | None
+    date_max: date | None
+    categories: list[str]
+    sellers: list[FilterSellerOut]
+
+
+class DashboardCompareOut(BaseModel):
+    current: DashboardOut
+    previous: DashboardOut
+    current_start: date
+    current_end: date
+    previous_start: date
+    previous_end: date
+    # None when previous.total_value == 0
+    growth_total_value_pct: float | None
