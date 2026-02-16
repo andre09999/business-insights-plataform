@@ -1,0 +1,8 @@
+
+4) Insights automáticos (sem “IA pesada” ainda, mas já inteligente)
+4.1 — Endpoint (exemplo simples)
+5) Frontend React Dashboard (listar + KPIs + gráfico + ranking)
+
+A primeira tela (MVP):
+
+
