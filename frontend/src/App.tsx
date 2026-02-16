@@ -1,10 +1,19 @@
-import './App.css'
-import { DashboardPage } from "./pages/DashboardPage";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AppShell } from "./layout/AppShell";
+import { OverviewPage } from "./pages/OverviewPage";
+import { MetasPerformancePage } from "./pages/MetasPerformancePage";
+import { SellersRankingPage } from "./pages/SellersRankingPage";
 
 export default function App() {
   return (
-    <div className="min-h-screen text-white bg-neutral-950 [background-image:radial-gradient(1200px_500px_at_20%_0%,rgba(99,102,241,0.18),transparent_60%),radial-gradient(900px_400px_at_90%_10%,rgba(34,211,238,0.12),transparent_55%)]">
-      <DashboardPage />
-    </div>
-  )
-} 
+    <BrowserRouter>
+      <Routes>
+        <Route element={<AppShell />}>
+          <Route path="/" element={<OverviewPage />} />
+          <Route path="/metas" element={<MetasPerformancePage />} />
+          <Route path="/ranking" element={<SellersRankingPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}
