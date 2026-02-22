@@ -1,5 +1,4 @@
 import type { Dataset, FiltersResponse, UUID } from "../types/api";
-import { NavLink } from "react-router-dom";
 import { useSidebar } from "./sidebarContext";
 
 export function Topbar(props: {
@@ -18,12 +17,6 @@ export function Topbar(props: {
 
   const minMonth = props.filters?.date_min.slice(0, 7) ?? "";
   const maxMonth = props.filters?.date_max.slice(0, 7) ?? "";
-
-  const tabBase =
-    "flex-1 h-10 rounded-xl border px-3 text-sm transition flex items-center justify-center";
-  const tabActive = "border-white/15 bg-white/10 text-white";
-  const tabIdle =
-    "border-white/10 bg-black/20 text-white/70 hover:bg-white/5 hover:text-white";
 
   const control =
     "w-full h-10 rounded-xl border border-white/10 bg-black/30 px-3 text-sm text-white outline-none focus:ring-2 focus:ring-white/20 hover:border-white/20 transition-all";
@@ -49,28 +42,6 @@ export function Topbar(props: {
 
             <p className="mt-1 text-sm text-white/60">{props.subtitle}</p>
 
-            {/* Tabs mobile */}
-            <div className="mt-3 flex gap-2 md:hidden">
-              <NavLink
-                to="/"
-                end
-                className={({ isActive }) => `${tabBase} ${isActive ? tabActive : tabIdle}`}
-              >
-                Visão Geral
-              </NavLink>
-              <NavLink
-                to="/metas"
-                className={({ isActive }) => `${tabBase} ${isActive ? tabActive : tabIdle}`}
-              >
-                Metas
-              </NavLink>
-              <NavLink
-                to="/ranking"
-                className={({ isActive }) => `${tabBase} ${isActive ? tabActive : tabIdle}`}
-              >
-                Ranking
-              </NavLink>
-            </div>
           </div>
 
           {/* ✅ DESKTOP: grid normal */}
