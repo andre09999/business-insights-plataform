@@ -98,17 +98,23 @@ export function buildInsights(args: {
   const best = weekdayAvg[0];
   const worst = weekdayAvg[weekdayAvg.length - 1];
 
-  if (best && worst && best.count > 0 && worst.count > 0) {
-    const d = pct(best.avg, worst.avg);
-    insights.push({
-      icon: "📊",
-      title: "Picos semanais",
-      severity: "info",
-      body: `Melhor dia: ${weekdayNames[best.weekday]} (média ${brl(best.avg)}). Pior dia: ${
-        weekdayNames[worst.weekday]
-      } (média ${brl(worst.avg)}).${d !== null ? ` Diferença ~${d.toFixed(0)}%.` : ""}`,
-    });
-  }
+if (best && worst && best.count > 0 && worst.count > 0) {
+  const d = pct(best.avg, worst.avg);
+
+  insights.push({
+    icon: "📊",
+    title: "Picos semanais",
+    severity: "info",
+    body: `O melhor dia da semana é ${weekdayNames[best.weekday]}, com média de ${brl(best.avg)}. 
+O pior desempenho ocorre em ${weekdayNames[worst.weekday]}, com média de ${brl(worst.avg)}.${
+      d !== null
+        ? ` A diferença média entre eles é de aproximadamente ${d.toLocaleString("pt-BR", {
+            maximumFractionDigits: 0,
+          })}%.`
+        : ""
+    }`,
+  });
+}
 
   // 📉 Queda em determinado período (pior janela de 7 dias vs média geral)
   const window = 7;
