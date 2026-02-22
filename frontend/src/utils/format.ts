@@ -11,10 +11,13 @@ export function formatDateLongBR(iso: string) {
   const [y, m, d] = iso.split("-").map(Number);
   const dt = new Date(y, (m ?? 1) - 1, d ?? 1);
 
-  // pt-BR com mês por extenso
-  return new Intl.DateTimeFormat("pt-BR", {
+  // Ex: 1 de fevereiro de 2026
+  const s = new Intl.DateTimeFormat("pt-BR", {
     day: "numeric",
     month: "long",
     year: "numeric",
   }).format(dt);
+
+  // deixa a primeira letra maiúscula (opcional, fica mais “premium”)
+  return s.charAt(0).toUpperCase() + s.slice(1);
 }

@@ -8,7 +8,7 @@ import { CardKpi } from "../components/CardKpi";
 import { SeriesChart } from "../components/SeriesChart";
 import { CategoriesChart } from "../components/CategoriesChart";
 import { SellersTable } from "../components/SellersTable";
-import { formatBRL } from "../utils/format";
+import { formatBRL, formatDateLongBR } from "../utils/format";
 import { InsightsPanel } from "../components/InsightsPanel";
 import { SellersGoalsPanel } from "../components/SellersGoalsPanel";
 
@@ -125,18 +125,20 @@ export function DashboardPage() {
     })();
   }, [datasetId, filters, month, sellerId]);
 
-  const subtitle = useMemo(() => {
-    if (!filters || !month) return "";
-    const { start, end } = monthRange(month);
-    const clamped = clampRangeToDataset(start, end, filters.date_min, filters.date_max);
+const subtitle = useMemo(() => {
+  if (!filters || !month) return "";
 
-    const sellerLabel =
-      sellerId && filters.sellers.find((s) => s.seller_id === sellerId)?.seller_name
-        ? ` • Vendedor: ${filters.sellers.find((s) => s.seller_id === sellerId)!.seller_name}`
-        : "";
+  const { start, end } = monthRange(month);
+  const clamped = clampRangeToDataset(start, end, filters.date_min, filters.date_max);
 
-    return `${clamped.start} → ${clamped.end}${sellerLabel}`;
-  }, [filters, month, sellerId]);
+  const sellerName = sellerId
+    ? filters.sellers.find((s) => s.seller_id === sellerId)?.seller_name
+    : null;
+
+  const period = `${formatDateLongBR(clamped.start)} — ${formatDateLongBR(clamped.end)}`;
+
+  return sellerName ? `${period} • Vendedor: ${sellerName}` : period;
+}, [filters, month, sellerId]);
 
   function exportCsv() {
     if (!datasetId || !filters || !month) return;
@@ -214,14 +216,14 @@ export function DashboardPage() {
                   <div className="mt-2 text-sm text-white/85">
                     {dash.kpis.best_day ? (
                       <div>
-                        ✅ {dash.kpis.best_day.date}: {formatBRL(dash.kpis.best_day.value)}
+                        ✅ {formatDateLongBR(dash.kpis.best_day.date)}: {formatBRL(dash.kpis.best_day.value)}
                       </div>
                     ) : (
                       <div>✅ —</div>
                     )}
                     {dash.kpis.worst_day ? (
                       <div className="mt-1">
-                        ⚠️ {dash.kpis.worst_day.date}: {formatBRL(dash.kpis.worst_day.value)}
+                        ⚠️ {formatDateLongBR(dash.kpis.worst_day.date)}: {formatBRL(dash.kpis.worst_day.value)}
                       </div>
                     ) : (
                       <div className="mt-1">⚠️ —</div>
