@@ -324,7 +324,7 @@ def top_categories(
 async def upload_dataset(
     file: UploadFile = File(...), db: Session = Depends(get_db)
 ):
-    if not file.filename.lower().endswith(".csv"):
+    if not file.filename or not file.filename.lower().endswith(".csv"):
         raise HTTPException(status_code=400, detail="Envie um arquivo .csv")
 
     content = await file.read()
@@ -509,7 +509,10 @@ def _normalize_date_filters(
     - se vier só end_date, completa start_date com ds.date_min
     - valida start_date <= end_date
     """
-    if start_date is not None and end_date is None:
+    if start_date is None and end_date is None:
+        start_date = ds.date_min
+        end_date = ds.date_max
+    elif start_date is not None and end_date is None:
         end_date = ds.date_max
     elif end_date is not None and start_date is None:
         start_date = ds.date_min
@@ -588,6 +591,12 @@ def dashboard_compare(
     start_date, end_date = _normalize_date_filters(ds, start_date, end_date)
 
     # período anterior com mesma duração (inclusive)
+    if start_date is None or end_date is None:
+        raise HTTPException(
+            status_code=422,
+            detail="Nao foi possivel determinar o periodo para comparacao.",
+        )
+
     span_days = (end_date - start_date).days
     previous_end = start_date - timedelta(days=1)
     previous_start = previous_end - timedelta(days=span_days)

@@ -11,7 +11,11 @@ export function getFilters(datasetId: UUID) {
 
 export function getDashboard(
   datasetId: UUID,
-  params?: { start_date?: string; end_date?: string; seller_id?: string }
+  params?: { start_date?: string; end_date?: string; seller_id?: string },
+  signal?: AbortSignal
 ) {
-  return apiGet<DashboardResponse>(`/datasets/${datasetId}/dashboard`, params);
+  return apiGet<DashboardResponse>(`/datasets/${datasetId}/dashboard`, {
+    params,
+    signal,
+  });
 }

@@ -74,7 +74,7 @@ def update_seller(
 
         seller.name = new_name
 
-    if payload.region is not None:
+    if "region" in payload.model_fields_set:
         seller.region = payload.region.strip() if payload.region else None
 
     if payload.is_active is not None:

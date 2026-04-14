@@ -1,14 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CardKpi } from "../components/CardKpi";
 import { SeriesChart } from "../components/SeriesChart";
 import { CategoriesChart } from "../components/CategoriesChart";
 import { InsightsPanel } from "../components/InsightsPanel";
 import { Topbar } from "../layout/Topbar";
-import { useDashboardData } from "../../hooks/useDashboardData";
+import { useDashboard } from "../dashboardContext";
 import { formatBRL } from "../utils/format";
 
 export function OverviewPage() {
-  const s = useDashboardData();
+  const s = useDashboard();
 
   return (
     <>
@@ -17,7 +16,7 @@ export function OverviewPage() {
         subtitle={s.subtitle}
         datasets={s.datasets}
         datasetId={s.datasetId}
-        onDatasetChange={s.setDatasetId as any}
+        onDatasetChange={s.setDatasetId}
         filters={s.filters}
         month={s.month}
         onMonthChange={s.setMonth}

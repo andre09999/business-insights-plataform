@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMemo, useState } from "react";
 import type { SellerRankingRow } from "../types/api";
 import { formatBRL } from "../utils/format";
@@ -15,7 +14,9 @@ function statusFrom(progress: number) {
   return { label: "Atrasado", badge: "bad", bar: "bg-rose-400/80" };
 }
 
-function badgeClass(kind: "good" | "warn" | "bad") {
+type BadgeKind = ReturnType<typeof statusFrom>["badge"];
+
+function badgeClass(kind: BadgeKind) {
   if (kind === "good") return "border-emerald-500/30 bg-emerald-500/10 text-emerald-100";
   if (kind === "warn") return "border-amber-500/30 bg-amber-500/10 text-amber-100";
   return "border-rose-500/30 bg-rose-500/10 text-rose-100";
@@ -91,7 +92,7 @@ export function SellersGoalsPanel(props: { rows: SellerRankingRow[] }) {
                           #{idx + 1} • {r.seller_name}
                         </div>
 
-                        <span className={`rounded-full border px-2 py-0.5 text-xs ${badgeClass(st.badge as any)}`}>
+                        <span className={`rounded-full border px-2 py-0.5 text-xs ${badgeClass(st.badge)}`}>
                           {st.label}
                         </span>
                       </div>

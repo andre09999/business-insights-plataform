@@ -90,7 +90,7 @@ export function DashboardPage() {
         setFilters(f);
 
         // ✅ começa no mês mais recente do dataset (date_max)
-        setMonth(f.date_max.slice(0, 7));
+        setMonth(f.date_max?.slice(0, 7) ?? f.date_min?.slice(0, 7) ?? "");
         setSellerId("");
       } catch (e) {
         setErr(e instanceof Error ? e.message : "Falha ao carregar filtros");
@@ -106,6 +106,11 @@ export function DashboardPage() {
       try {
         setLoading(true);
         setErr(null);
+
+        if (!filters.date_min || !filters.date_max) {
+          setDash(null);
+          return;
+        }
 
         const { start, end } = monthRange(month);
         const clamped = clampRangeToDataset(start, end, filters.date_min, filters.date_max);
@@ -128,6 +133,8 @@ export function DashboardPage() {
 const subtitle = useMemo(() => {
   if (!filters || !month) return "";
 
+  if (!filters.date_min || !filters.date_max) return "";
+
   const { start, end } = monthRange(month);
   const clamped = clampRangeToDataset(start, end, filters.date_min, filters.date_max);
 
@@ -142,6 +149,8 @@ const subtitle = useMemo(() => {
 
   function exportCsv() {
     if (!datasetId || !filters || !month) return;
+
+    if (!filters.date_min || !filters.date_max) return;
 
     const { start, end } = monthRange(month);
     const clamped = clampRangeToDataset(start, end, filters.date_min, filters.date_max);

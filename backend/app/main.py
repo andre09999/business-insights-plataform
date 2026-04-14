@@ -25,7 +25,7 @@ def _parse_cors_origins() -> list[str]:
     # aceita com espaços e aspas acidentais
     origins = []
     for part in raw.split(","):
-        o = part.strip().strip('"').strip("'")
+        o = part.strip().strip('"').strip("'").rstrip("/")
         if o:
             origins.append(o)
     return origins
@@ -38,7 +38,7 @@ if not origins:
     origins = [
         "http://localhost:5173",
         "http://127.0.0.1:5173",
-        "https://business-insights-plataform.netlify.app/"
+        "https://business-insights-plataform.netlify.app"
     ]
 
 app.add_middleware(

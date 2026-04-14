@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Topbar } from "../layout/Topbar";
-import { useDashboardData } from "../../hooks/useDashboardData";
+import { useDashboard } from "../dashboardContext";
 import { SellersGoalsPanel } from "../components/SellersGoalsPanel";
 
 export function MetasPerformancePage() {
-  const s = useDashboardData();
+  const s = useDashboard();
 
   return (
     <>
@@ -13,7 +12,7 @@ export function MetasPerformancePage() {
         subtitle={s.subtitle}
         datasets={s.datasets}
         datasetId={s.datasetId}
-        onDatasetChange={s.setDatasetId as any}
+        onDatasetChange={s.setDatasetId}
         filters={s.filters}
         month={s.month}
         onMonthChange={s.setMonth}

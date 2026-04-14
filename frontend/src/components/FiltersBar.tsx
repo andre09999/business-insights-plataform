@@ -10,8 +10,9 @@ export function FiltersBar(props: {
   onExport: () => void;
 }) {
   // min/max do month input precisam ser YYYY-MM
-  const minMonth = props.filters.date_min.slice(0, 7);
-  const maxMonth = props.filters.date_max.slice(0, 7);
+  const minMonth = props.filters.date_min?.slice(0, 7) ?? "";
+  const maxMonth = props.filters.date_max?.slice(0, 7) ?? "";
+  const monthDisabled = !minMonth || !maxMonth;
 
   return (
     <div className="grid grid-cols-1 gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 md:grid-cols-4">
@@ -21,6 +22,7 @@ export function FiltersBar(props: {
           type="month"
           min={minMonth}
           max={maxMonth}
+          disabled={monthDisabled}
           className="rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-white outline-none focus:ring-2 focus:ring-white/20"
           value={props.month}
           onChange={(e) => props.onChange({ month: e.target.value, sellerId: props.sellerId })}

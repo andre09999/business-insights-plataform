@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Topbar } from "../layout/Topbar";
-import { useDashboardData } from "../../hooks/useDashboardData";
+import { useDashboard } from "../dashboardContext";
 import { SellersTable } from "../components/SellersTable";
 
 export function SellersRankingPage() {
-  const s = useDashboardData();
+  const s = useDashboard();
 
   return (
     <>
@@ -13,7 +12,7 @@ export function SellersRankingPage() {
         subtitle={s.subtitle}
         datasets={s.datasets}
         datasetId={s.datasetId}
-        onDatasetChange={s.setDatasetId as any}
+        onDatasetChange={s.setDatasetId}
         filters={s.filters}
         month={s.month}
         onMonthChange={s.setMonth}

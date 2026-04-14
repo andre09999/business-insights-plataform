@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from uuid import UUID
 from sqlalchemy import select, func
 from sqlalchemy.orm import Session
 
@@ -58,7 +59,7 @@ def seed_if_empty():
         db.add(ds)
         db.flush()
 
-        seller_cache: dict[str, str] = {}
+        seller_cache: dict[str, UUID] = {}
         records: list[Record] = []
 
         for _, row in df.iterrows():
@@ -70,7 +71,7 @@ def seed_if_empty():
                 if seller_name:
                     if seller_name not in seller_cache:
                         seller = _get_or_create_seller(db, seller_name)
-                        seller_cache[seller_name] = str(seller.id)
+                        seller_cache[seller_name] = seller.id
                     seller_id = seller_cache[seller_name]
 
             records.append(

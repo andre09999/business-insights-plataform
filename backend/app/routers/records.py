@@ -16,6 +16,13 @@ def update_record(
     if not rec:
         raise HTTPException(status_code=404, detail="Record not found")
 
+    if "seller_id" not in payload.model_fields_set:
+        return {
+            "updated": False,
+            "record_id": rec.id,
+            "seller_id": str(rec.seller_id) if rec.seller_id else None,
+        }
+
     # valida seller_id (se foi enviado)
     if payload.seller_id is not None:
         seller = db.get(Seller, payload.seller_id)

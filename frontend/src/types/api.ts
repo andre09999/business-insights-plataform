@@ -11,8 +11,8 @@ export type Dataset = {
 };
 
 export type FiltersResponse = {
-  date_min: string;
-  date_max: string;
+  date_min: string | null;
+  date_max: string | null;
   categories: string[];
   sellers: Array<{ seller_id: UUID; seller_name: string }>;
 };

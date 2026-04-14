@@ -1,3 +1,5 @@
+from io import StringIO
+
 import pandas as pd
 
 DATE_CANDIDATES = ["date", "data", "event_date", "dia"]
@@ -26,8 +28,25 @@ def _pick_column(columns: list[str], candidates: list[str]) -> str | None:
     return None
 
 
-def parse_csv(content: bytes) -> tuple[pd.DataFrame, str, str, str | None]:
-    df = pd.read_csv(pd.io.common.BytesIO(content))
+def _decode_csv_content(content: bytes) -> str:
+    for encoding in ("utf-8-sig", "utf-8", "latin-1"):
+        try:
+            return content.decode(encoding)
+        except UnicodeDecodeError:
+            continue
+
+    raise ValueError("Nao foi possivel decodificar o CSV enviado.")
+
+
+def parse_csv(content: bytes) -> tuple[pd.DataFrame, str, str, str | None, str | None]:
+    decoded = _decode_csv_content(content)
+
+    try:
+        df = pd.read_csv(StringIO(decoded), sep=None, engine="python")
+    except Exception as exc:  # pragma: no cover - pandas exceptions vary
+        raise ValueError("Falha ao ler o CSV enviado.") from exc
+
+    df.columns = [str(column).strip() for column in df.columns]
 
     if df.empty:
         raise ValueError("CSV vazio.")
@@ -56,7 +75,5 @@ def parse_csv(content: bytes) -> tuple[pd.DataFrame, str, str, str | None]:
         raise ValueError(
             "Nenhuma linha válida após parse (data/valor inválidos)."
         )
-
-    seller_col = _pick_column(list(df.columns), SELLER_CANDIDATES)
 
     return df, date_col, value_col, cat_col, seller_col

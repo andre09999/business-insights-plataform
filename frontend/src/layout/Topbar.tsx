@@ -1,4 +1,5 @@
 import type { Dataset, FiltersResponse, UUID } from "../types/api";
+import { getMonthBounds } from "../utils/dashboard";
 import { useSidebar } from "./sidebarContext";
 
 export function Topbar(props: {
@@ -15,8 +16,7 @@ export function Topbar(props: {
 }) {
   const sidebar = useSidebar();
 
-  const minMonth = props.filters?.date_min.slice(0, 7) ?? "";
-  const maxMonth = props.filters?.date_max.slice(0, 7) ?? "";
+  const { minMonth, maxMonth } = getMonthBounds(props.filters);
 
   const control =
     "w-full h-10 rounded-xl border border-white/10 bg-black/30 px-3 text-sm text-white outline-none focus:ring-2 focus:ring-white/20 hover:border-white/20 transition-all";
@@ -49,7 +49,7 @@ export function Topbar(props: {
             <select
               className={control}
               value={props.datasetId}
-              onChange={(e) => props.onDatasetChange(e.target.value as UUID)}
+              onChange={(e) => props.onDatasetChange(e.target.value)}
             >
               <option value="" disabled>
                 Dataset…
@@ -66,6 +66,7 @@ export function Topbar(props: {
               min={minMonth}
               max={maxMonth}
               value={props.month}
+              disabled={!minMonth || !maxMonth}
               onChange={(e) => props.onMonthChange(e.target.value)}
               className={`${control} [color-scheme:dark]`}
             />
@@ -91,7 +92,7 @@ export function Topbar(props: {
               <select
                 className="h-10 w-[109px] shrink-0 rounded-xl border border-white/10 bg-black/30 px-2 text-[12px] text-white outline-none focus:ring-2 focus:ring-white/20"
                 value={props.datasetId}
-                onChange={(e) => props.onDatasetChange(e.target.value as UUID)}
+                onChange={(e) => props.onDatasetChange(e.target.value)}
                 title="Dataset"
               >
                 <option value="" disabled>
@@ -109,6 +110,7 @@ export function Topbar(props: {
                 min={minMonth}
                 max={maxMonth}
                 value={props.month}
+                disabled={!minMonth || !maxMonth}
                 onChange={(e) => props.onMonthChange(e.target.value)}
                 className="h-10 w-[109px] shrink-0 rounded-xl border border-white/10 bg-black/30 px-2 text-[12px] text-white outline-none focus:ring-2 focus:ring-white/20 [color-scheme:dark]"
                 title="Mês"

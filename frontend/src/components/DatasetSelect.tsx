@@ -5,7 +5,6 @@ export function DatasetSelect(props: {
   value?: UUID;
   onChange: (id: UUID) => void;
 }) {
-  console.log("DATASETS:", props);
   return (
     <div className="flex flex-col gap-1">
       <label className="text-sm text-white/70">Dataset</label>

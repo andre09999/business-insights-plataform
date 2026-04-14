@@ -1,38 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
+import { getDashboard, getFilters, listDatasets } from "../src/api/datasets";
 import type { DashboardResponse, Dataset, FiltersResponse, UUID } from "../src/types/api";
-import { listDatasets, getDashboard, getFilters } from "../src/api/datasets";
+import { getClampedMonthRange, getDefaultMonth } from "../src/utils/dashboard";
 import { formatDateLongBR } from "../src/utils/format";
-
-
-function toDate(iso: string) {
-  const [y, m, d] = iso.split("-").map(Number);
-  return new Date(y, (m ?? 1) - 1, d ?? 1);
-}
-function toISO(d: Date) {
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${y}-${m}-${day}`;
-}
-function monthRange(month: string) {
-  const [y, m] = month.split("-").map(Number);
-  const start = new Date(y, (m ?? 1) - 1, 1);
-  const end = new Date(y, (m ?? 1), 0);
-  return { start: toISO(start), end: toISO(end) };
-}
-function clampRangeToDataset(startISO: string, endISO: string, dateMin: string, dateMax: string) {
-  const s = toDate(startISO);
-  const e = toDate(endISO);
-  const min = toDate(dateMin);
-  const max = toDate(dateMax);
-
-  const cs = s < min ? min : s;
-  const ce = e > max ? max : e;
-
-  if (cs > ce) return { start: toISO(min), end: toISO(max) };
-  return { start: toISO(cs), end: toISO(ce) };
-}
-
 export function useDashboardData() {
   const [datasets, setDatasets] = useState<Dataset[]>([]);
   const [datasetId, setDatasetId] = useState<UUID | "">("");
@@ -45,19 +15,30 @@ export function useDashboardData() {
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
-  // datasets
   useEffect(() => {
+    let active = true;
+
     (async () => {
       try {
         setErr(null);
-        const ds = await listDatasets();
-        setDatasets(ds);
-        const first = ds.find((d) => d.status === "ready") ?? ds[0];
-        if (first) setDatasetId(first.id);
-      } catch (e) {
-        setErr(e instanceof Error ? e.message : "Falha ao carregar datasets");
+        const items = await listDatasets();
+        if (!active) return;
+
+        setDatasets(items);
+
+        const firstReady = items.find((item) => item.status === "ready") ?? items[0];
+        if (firstReady) {
+          setDatasetId(firstReady.id);
+        }
+      } catch (error) {
+        if (!active) return;
+        setErr(error instanceof Error ? error.message : "Falha ao carregar datasets");
       }
     })();
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   // filters por dataset
